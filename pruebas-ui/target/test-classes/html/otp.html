@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Verificación OTP</title>
+<style>
+  body { font-family: Arial; padding: 40px; }
+  input, button { font-size: 18px; padding: 6px; margin: 10px 0; }
+  #resultado { margin-top: 20px; font-size: 20px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h2>Validación de Código OTP</h2>
+
+<input id="codigo" type="text" placeholder="Ingresa OTP">
+
+<button id="btnValidar">Validar Código</button>
+
+<div id="resultado"></div>
+
+<script>
+document.getElementById("btnValidar").addEventListener("click", function() {
+    const codigo = document.getElementById("codigo").value;
+    if (codigo && codigo.length === 6) {
+        document.getElementById("resultado").innerText = "Código válido ✔";
+    } else {
+        document.getElementById("resultado").innerText = "Código incorrecto ❌";
+    }
+});
+</script>
+
+</body>
+</html>
