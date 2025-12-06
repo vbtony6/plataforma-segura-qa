@@ -1,4 +1,4 @@
-name: Maven CI
+name: CI Playwright + API + UI
 
 on:
   push:
@@ -11,14 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout del repositorio
-      uses: actions/checkout@v3
+      - name: Chequear código
+        uses: actions/checkout@v3
 
-    - name: Configurar Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+      - name: Instalar Java 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
 
-    - name: Compilar y ejecutar tests
-      run: mvn -B verify --file pom.xml
+      - name: Instalar Playwright browsers
+        run: mvn -pl pruebas-ui exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
+
+      - name: Ejecutar pruebas API
+        run: mvn -pl pruebas-api test
+
+      - name: Ejecutar pruebas UI (headless)
+        run: mvn -pl pruebas-ui test -Dheadless=true
+
+      - name: Guardar reporte Allure
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: target/site/allure-maven-plugin

@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,30 +38,38 @@ public class PruebaLogin2FATest {
         String otp = leerOTP();
         System.out.println("OTP leído desde archivo: " + otp);
 
+        // Playwright en modo headless para GitHub Actions
         try (Playwright playwright = Playwright.create()) {
 
             Browser browser = playwright.chromium().launch(
-                    new BrowserType.LaunchOptions().setHeadless(false)
+                    new BrowserType.LaunchOptions()
+                            .setHeadless(true)   // 👈 Obligatorio en GitHub Actions
+                            .setArgs(Arrays.asList("--no-sandbox", "--disable-dev-shm-usage"))
             );
 
             Page page = browser.newPage();
 
             // ----------------------------------------
-            // Ajuste crítico: usar ruta desde target/test-classes
+            // Cargar el HTML desde target/test-classes
             // ----------------------------------------
             String rutaHtml = Paths.get("target", "test-classes", "html", "otp.html")
                     .toAbsolutePath()
                     .toUri()
                     .toString();
 
+            System.out.println("Ruta HTML cargada: " + rutaHtml);
+
             page.navigate(rutaHtml);
 
             // ----------------------------------------
-            // Interacciones
+            // Interacciones en UI
             // ----------------------------------------
             page.waitForSelector("#codigo");
             page.fill("#codigo", otp);
+
             page.locator("button:has-text('Validar Código')").click();
+
+            page.waitForSelector("#resultado");
 
             // ----------------------------------------
             // 📸 Captura para Allure
@@ -76,7 +85,11 @@ public class PruebaLogin2FATest {
                     "png"
             );
 
-            page.waitForSelector("#resultado");
+            System.out.println("🔐 Validación OTP finalizada correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error durante la validación del OTP", e);
         }
     }
 }
