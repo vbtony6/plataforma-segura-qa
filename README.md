@@ -127,5 +127,5 @@ Es un proyecto ideal para entrevistas técnicas, portafolio profesional y presen
 ---
 
 ## ✨ Autor
-**Superman II (Julio Lazo)**  
+**Julio Lazo**  
 QA Automation Specialist  
