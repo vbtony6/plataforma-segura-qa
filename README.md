@@ -122,8 +122,10 @@ Este repositorio fue creado como demostración profesional de:
 - CI/CD corporativo  
 - Buenas prácticas QA Senior  
 
+Es un proyecto ideal para entrevistas técnicas, portafolio profesional y presentaciones para empresas.
+
 ---
 
 ## ✨ Autor
-Julio Lazo
+**Superman II (Julio Lazo)**  
 QA Automation Specialist  
